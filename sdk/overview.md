@@ -2,26 +2,26 @@
 
 This document outlines a proposal for mobile service SDK 
 
-## Goals
+# Goals
 
 Main goal for this document is to provide full overview of the future mobile SDK.
 Document outlines a proposal for mobile service SDK's and all related elements.
 Proposal basing on industry standards for building multi service SDK's. 
 
-### Primary Goals
+## Primary Goals
 
 Provide top level architecture and delivery model for mobile SDK's.
 
-### Non Goals
+## Non Goals
 
 Describe individual service SDK's:
 This will be done in separate proposals.
 
-## Problem Description
+# Problem Description
 
 Selecting best architecture used to build mobile SDK . 
 
-### Elements to include
+## Elements to include
 
 1. Git hosting
 
@@ -52,11 +52,11 @@ For example method limit on android
 8. Platform language
 Supporting multiple flavours (languages per platform) - Swift vs ObjectiveC. Java vs Kotlin etc.
 
-## Proposed Solution
+# Proposed Solution
 
 Modular SDK For SDK that can contain multiple non related services 
 
-### Overview
+## Overview
 
 Modular architecture is a software design technique that emphasizes separating the functionality of a program into independent, interchangeable modules, such that each contains everything necessary to execute only one aspect of the desired functionality.
 
@@ -68,7 +68,7 @@ This technique applies especially for large SDK’s that will implement clients 
 
 Having top level SDK allows developers to provide fluent api (different forms of the top level api that can be swapped and extended). Modular architecture also enforces good programming patterns. Networking, Logging etc. are loosely coupled with the service which allows developers to swap implementations with their own favorite network or logging library.
 
-#### Advantages of modular SDK
+## Advantages of modular SDK
 
 - Easy to maintain as common elements can be extracted to base layer
 - Easy to scale while providing uniform way of integration with services
@@ -81,23 +81,21 @@ Having top level SDK allows developers to provide fluent api (different forms of
 - Simplicity of analytics and other cross service components.
 - Simplified documentation (assuming that packages are in mono repository)
 
-####  Possible side effects
+## Possible side effects
 
 - Grouping services together may make it harder to contribute to the individual services.
 - Modular SDK’s are easy to maintain in platform specific mono repositories, which may not be acceptable in some cases.
 
-### General requirements 
+# General SDK requirements 
 
-SDK should relay on reactive (RX*) api used for internal communication between SDK components. On each platform can be implemented using RXJS, RXJava etc.
-
-#### Git hosting
+## Git hosting
 
 For most efficient automation single repository per platform is recommended.
 Repository will contain all related services source code, core module, deployment automation, documentation etc.
 
-### Platform specific requirements
+# Platform specific requirements
 
-#### Cordova
+## Cordova
 
 ### Distribution
 
@@ -105,23 +103,22 @@ Packages in common.js format (standard for cordova)
 NPM @aerogear organization will be used to host packages.
 Lerna.js for deployment automation.
 
-## Documentation
+### Documentation
 
 Generated from source code + separate folder with examples.
 
-## Language
+### Language
 
 TypeScript as base language for SDK. 
 
-#### Android
+## Android
 
 TODO 
 Integrate: https://github.com/aerogear/proposals/pull/2 
 
-
-#### IOS
-
-TODO 
+## IOS
+### Distribution
 Cocoapods/Swift Package Manager
-ObjectiveC core
+
+### Documentation
 Documentation: https://github.com/realm/jazzy
