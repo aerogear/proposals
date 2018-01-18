@@ -12,25 +12,7 @@ The initial discussions which led to this proposal were around how to handle ver
 * At what level are versions kept?
 * When changes are made to differnt components, what is the impact on dependent components?
 * Do we have rules which define compatibility? 
-
-## Use Cases to be Considered
-
-1. There is a change to the **backend** of the Mobile Service
-    1. an API breaking change - SemVer states that this should be a 'MAJOR' version change
-    2. new functionlity, no API change - SemVer states that this shouldbe a 'MINOR' version change
-    3. bug fix, no API change - SemVer states that this shouldbe a 'PATCH' version change
-
-   What happens to the versions of the SDKs?
-2. There is a change to one of the **Mobile Client Service SDKs**
-    1. an API breaking change - <span style="color:blue">Wei; do we think that this is going to be a MAJOR change?</span>
-    2. new functionlity, no API change
-    3. bug fix, no API change 
-
-   What happens with the backend?
-
-   What happens with the other non changing SDKs
-
-3. How would a Mobile Service upgrade work? 
+ 
 
 ## Asumptions
 Listing of assumptions on how other parts of the system will work, as the proposal may base some decisions on these assumptions.
@@ -74,30 +56,31 @@ The MAD will use the Mobile CLI for service integrations and possibly also to ge
   * Mobile Client Service SDK (Android) and its API (Major.Minor.Patch)
   * Mobile Client Service SDK (iOS) and its API (Major.Minor.Patch)
   * Mobile Client Service SDK (Cordova) and its API (Major.Minor.Patch)
+  * Mobile Service APB (Major.Minor.Patch)
+
+  ![Alt](images/Service-Versioning.png)
+
+  <img src="images/Service-Versioning.png"
+     alt="Service Versioning" />
 
 We need a set of rules which can be used to enforce compliance across these sub components.
 
 ### Proposed Rules to be applied
-1. **Lockstep between Mobile Client Service SDKs and the overall Mobile Service Version**
+1. **Lockstep across all Mobile Service Components**
 
    Major and Minor versions only.
-   If any one of the Mobile Client SDKs (Android, iOS, Cordova) step Major or Minor version, the other Mobile Clinet SDK versions step also and the overall Mobile Service Version also steps
+   If any one of the Mobile Client components step Major or Minor version, the other component of the Mobile Service versions step also and the overall Mobile Service Version also steps
 
-   **Example**; 
-
-   Mobile Service v1.2 (MC-A v1.2, MC-I v1.2, MC-C v1.2, Backend v1.2)
-   There is a change in the 'Mobile Client Service SDK - iOS' which results in its version stepping from 1.2 to 1.3
    The knock on impact of this rule is that all components step in unison, from 1.2 to 1.3, even though there were no changes in the other componets.
 
    **Value provided by this rule**
+   For the MAD, if he/she has a version of a Service, the same version of the sub components are available also.
 
-   _I think its important that we try to fill this out_ 
+   Note; you can still patch any of the sub components, with out impacting the other versions.
 
-   Open Questions
-   - What happens if the Service iOS SDK had to step major versions? Is this a valid use case?
-   - Unsure if we need to step every Mobile Client SDK if only one changes. We could just step the overall Mobile Service version when a single SDK changes. But on further thought, this may not be good, it could lead to the following set of versions; MS v1.5, iOS-SDK v1.4, And-SDK v1.2, Cor-SDK v1.0, Backend v1.3.
+   <span style="color:blue">Wei; should we step the patch version of the overall service version?</span>
 
-2. **Mobile Client Service SDK compatibility**
+2. **Mobile Client Service SDK compatibility with Backend Component**
    
    For the Client Service SDK to be compatiable with the backend service;
 
@@ -112,31 +95,21 @@ We need a set of rules which can be used to enforce compliance across these sub 
         | v2.1          | v1.4          | InCompatible   |
         | v1.6          | v1.4          | InCompatible   |
 
-   Open Questions
-   * A presumption is that the  mobile Device will support many versions of the same SDK, e.g. like I can have various JAVA versions. If so then when a Mobile App Developer is writing their app, they will need to import a specific version of the SDK
+   <span style="color:blue">Wei; Is this rule defunct now? Maybe not; a MAD may upgrade the Service from 1.4 to 1.5 but may not change his/her import (it imported 1.4 in the business logic and their code will still work.</span>
 
-3. **SemVer Rules**
+3. **A public API breaking change results in a step in the MAJOR version**
+   
+   If there is a breaking change to any of the public APIs of the Service, then there must be a step in the MAJOR version of all components.
 
-   [Semantic Versioning Rules](https://semver.org/) 
-
-### Apply the Rules to the Use Cases
-
-| Use Case      | Backend Service | Client iOS SDK | Client Android SDK | Client Cordova SDK | Overall Mobile Service Version |
-| :------------|:---------------:| :-------------:| :-----------------:| :-----------------:| :-----------------------------:|
-| Starting Versions before UCs                                          | v1.4     | v1.4       | v1.4      |  v1.4 |  v1.4 |
-| | | | |  | |
-| UC-1.1 - All SDKs will have to change                                 | **v1.5** | v1.5       | v1.5      |  v1.5 |  v1.5 |
-| UC-1.2 - No SDK needs changes                                         | **v1.5** | v1.4       | v1.4      |  v1.4 |  v1.5 |
-| UC-2.1 - iOS SDK change - step all other SDKs - backend doesn't change| v1.4     | **v1.5**   | v1.5      |  v1.5 |  v1.5 |
-| UC-2.2 - Android SDK change - is this just a patch?                   | v1.4     | v1.4       | **v1.4.1**|  v1.4 |  v1.4 |
-
-
-
-
-## General Open Questions
-- launch.io missions and the proposed stories. Are they the same thing or different?
--  
 
 ### Benetits of Solution
+- we try to work at a service level which is the level at which our primary users work at.
+- we try to simplify the experience for the primary user
+
 
 ### Limitations of Solution
+- we step components even if they don't change
+
+
+## Additional Considerations
+- the relationship between the Core SDK and its version with the Service SDKs!
