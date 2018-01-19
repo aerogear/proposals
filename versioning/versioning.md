@@ -42,10 +42,12 @@ The intention is that the MAD will only have to deal with the Mobile Service ver
 * Because the MAD will be responsible for service integrations he/she will have to be aware of the compatiability between services.
 
    **Example Service Integration Martix**
+
         | Synch         | Keycloak         | Compatibility  |
-        | 	  :---:     |        :---:     |      :---:     |
+        |  -----------  |  --------------  |  ------------  |
         | v1.3.\*       | v1.4, v1.5, v1.6 | Compatiable    |
         | v2.1          | v2.\*, v3.1, v3.2| Compatiable    |
+
 The above matrix needs to exist somewhere and be available to the MAD.
 
 The MAD will use the Mobile CLI for service integrations and possibly also to get config to add to his/her project. The Mobile CLI's version will most likely be associated with the version of OpenShift.
@@ -77,27 +79,28 @@ Below are a set of rules to make versioning simpler and to encompass the various
      - the sub-components are tagged and released when the service is being released (one component may not have changed across two service releases, therefore it will have the two service release tags (e.g. SYNCH-1.3.1, SYNCH-1.4.0) on the same GIT commit hash)
 
    **Value provided by this rule**
-   1. Even less confusion for MAD, they just import the Mobile Service and the version they want  
-   2. Same process for every release, easy for the community to follow
-   3. All releases should be scheduled. We should have less patch releases in this case.
-   
+   * Even less confusion for MAD, they just import the Mobile Service and the version they want  
+   * Same process for every release, easy for the community to follow
+   * All releases should be scheduled. We should have less patch releases in this case.
 
 2. **Public API Compatibility between versions of a Mobile Service**
    
    If the MAJOR version number of a service is the same then the APIs are backward comaptiable.
 
    **Example**
+
         | Service Version | Service Version | API Compatibility  |
         | --------------- | --------------- | ------------------ |
         | v1.3            | v1.4            | Compatiable        |
         | v1.6            | v2.0            | InCompatiable      |
 
+   
 3. **A public API breaking change results in a step in the MAJOR version**
    
    If there is a breaking change to any of the public APIs of the Service, then there must be a step in the MAJOR version of all components.
 
 ### Releasing
-If this approach is to be adopted, it would mean doing a release at a Mobile Service level and possibly have a release at teh end of every Sprint, i.e. picking up any changes across the components over the period.
+If this approach is to be adopted, it would mean doing a release at a Mobile Service level and possibly have a release at the end of every Sprint, i.e. picking up any changes across the components over the period.
 
 
 ### Benetits of Solution
