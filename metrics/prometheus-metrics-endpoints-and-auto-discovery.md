@@ -126,6 +126,27 @@ This approach allows us to load the datasources, dashboard providers and dashboa
 
 One question arising from this approach is 'What if downstream users want to define their own dashboards and have them discovered?' Allowing users to pollute the Config Map that also stores the upstream service dashboards is not a good approach. To mitigate this, we could configure Grafana to scan another directory e.g. `user-dashboards`, allowing user dashboards to be stored and discovered in a separate Config Map.
 
+#### Auto Discovery of Service Dashboard Definitions
+
+An approach to automated discovery of dashboard definitions is being investigated. The initial discussion of this approach can be seen [here](https://github.com/aerogear/proposals/pull/5#discussion_r157767612).
+
+The approach involves a sidecar service running inside the same pod as Grafana. This service would use the Kubernetes API to watch the namespace for Config Maps containing a Grafana dashboard definition (JSON). These Config Maps will be identified with an annotation. For example:
+
+```
+org.aerogear.grafana.dashboard: true
+```
+
+The sidecar service would feed the disovered dashboard JSON definitions into Grafana using an API call.
+
+The advantage is that the dashboard JSON would be bundled either with the service or with the service APB. This reduces the potential for version mismatches between a service and its associated Grafana dashboard. It also means downstream users could define their own dashboards for their services and have them auto-loaded into Grafana.
+
+The added cost to this approach is that a custom service might need to be built (or or an existing one will need extra development).
+
+To validate the sidecar approach a PoC demo will be developed using this existing service: https://github.com/PierreVincent/k8s-grafana-watcher
+This service is written in Golang and is a very basic implementation. For example, It does not handle updates or deletion of Config Maps.
+
+The progress of this investigation is being followed in this JIRA ticket: https://issues.jboss.org/browse/AEROGEAR-1821
+
 ### Auth
 
 Both Prometheus and Grafana will be accessible to users who have an account in the OpenShift cluster where they are deployed. This will allow for easier use of those services via single sign on.
