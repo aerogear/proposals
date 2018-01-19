@@ -68,12 +68,13 @@ Below are a set of rules to make versioning simpler and to encompass the various
 
 ### Proposed Rules to be applied
 1. **Have just a Mobile Service Version only (MAJOR.MINOR.PATCH)**
+   
    There will only be versioning at Mobile Service level and not at sub-component level
 
    - When do we step a version of the Mobile Service?
      - if any of the components change (Backend, APB, Any of the SDKs) the Service Version will change
    - We don't version the sub-components explicitly
-     - the sub-components are tagged and released when the service is being released (one component may have not have changed across two service releases, therefore it will have the two service release tags on the same GIT commit hash)
+     - the sub-components are tagged and released when the service is being released (one component may not have changed across two service releases, therefore it will have the two service release tags (e.g. SYNCH-1.3.1, SYNCH-1.4.0) on the same GIT commit hash)
 
    **Value provided by this rule**
    1. Even less confusion for MAD, they just import the Mobile Service and the version they want  
@@ -83,13 +84,13 @@ Below are a set of rules to make versioning simpler and to encompass the various
 
 2. **Public API Compatibility between versions of a Mobile Service**
    
-   If the MAJOR version number is the same then the APIs are backward comaptiable.
+   If the MAJOR version number of a service is the same then the APIs are backward comaptiable.
 
    **Example**
         | Service Version | Service Version | API Compatibility  |
-        | :---: | :---: | :---: |
-        | v1.3          | v1.4           | Compatiable    |
-        | v1.6          | v2.0           | InCompatiable    |
+        | --------------- | --------------- | ------------------ |
+        | v1.3            | v1.4            | Compatiable        |
+        | v1.6            | v2.0            | InCompatiable      |
 
 3. **A public API breaking change results in a step in the MAJOR version**
    
