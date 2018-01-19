@@ -26,24 +26,24 @@ This solution looks to simplify as much as possible 'versioning' for the primary
 
 * One of the first tasks a MAD will perform is to go to the Service Catalog and provision the Mobile Services he/she requires. In doing this they are working at a 'service level'.
 
-* The next task which the MAD will perform is to integrate two services via the Mobile CLI (could be eventually from the IDE Plugin which will use teh CLI). Again the level in which the MAD is working at is 'service level'. At this point, a lot of the work on the backend is complete, the MAD can proceed to develop his/her app on the client side.
+* The next task which the MAD will perform is to integrate two services via the Mobile CLI (could be eventually from the IDE Plugin which will use the CLI). Again the level in which the MAD is working at is 'service level'. At this point, a lot of the work on the backend is complete, the MAD can proceed to develop his/her app on the client side.
 
-* Next task for the MAD is to include the IDE plugin. Just get teh latest version of the plugin. Use of the plugin is probably optional.
+* Next task for the MAD is to include the IDE plugin. Just get the latest version of the plugin. Use of the plugin is probably optional.
 
-* Next is for the MAD to import the SDK which is needed for the service he/she is using. The SDK being a component of the Service. At this point the MAD is working at an 'SDK level'.
+* Next is for the MAD to import the SDK which is needed for the service he/she is using. The SDK being a component of the Service. At this point the MAD is working at an 'SDK level', even though what they want is an API they can use to access their provisioned Mobile Service, the SDK being the implementation of that interface.
 
 
    Based on the above, we are proposing an overarching **Mobile Service version**. This overall version will encompass a number of sub components defined further on.
 
 The intention is that the MAD will only have to deal with the Mobile Service version, to simplify their experience. 
 
-* Once they import a Service version, they get the latest SDK for the platform they are working on
+* Once they import a Service version (e.g. v1.3), they get the version of SDK (e.g. v1.3) which is inline with the Service version for the platform they are working on
 * The only time they will need to upgrade their own code (i.e. their business logic) is if they are upgrading to a new MAJOR release of the Service, i.e. the public interface of the Service potentially has changed.
 * Because the MAD will be responsible for service integrations he/she will have to be aware of the compatiability between services.
 
    **Example Service Integration Martix**
         | Synch         | Keycloak         | Compatibility  |
-        | :------------:|:----------------:| :-------------:|
+        | 	  :---:     |        :---:     |      :---:     |
         | v1.3.\*       | v1.4, v1.5, v1.6 | Compatiable    |
         | v2.1          | v2.\*, v3.1, v3.2| Compatiable    |
 The above matrix needs to exist somewhere and be available to the MAD.
@@ -56,66 +56,55 @@ The MAD will use the Mobile CLI for service integrations and possibly also to ge
 ### Mobile Service Components
 
 * Mobile Service Name and Overall Version (Major.Minor.Patch)
-  * Backend Component and its API (Major.Minor.Patch)
-  * Mobile Client Service SDK (Android) and its API (Major.Minor.Patch)
-  * Mobile Client Service SDK (iOS) and its API (Major.Minor.Patch)
-  * Mobile Client Service SDK (Cordova) and its API (Major.Minor.Patch)
-  * Mobile Service APB (Major.Minor.Patch)
+  * Backend Component and its API 
+  * Mobile Client Service SDK (Android) and its API 
+  * Mobile Client Service SDK (iOS) and its API 
+  * Mobile Client Service SDK (Cordova) and its API 
+  * Mobile Service APB
 
   ![Alt](images/Service-Versioning.png)
 
-We need a set of rules which can be used to enforce compliance across these sub components.
+Below are a set of rules to make versioning simpler and to encompass the various components which encompass a Mobile Service.
 
 ### Proposed Rules to be applied
-1. **Lockstep across all Mobile Service Components**
+1. **Have just a Mobile Service Version only (MAJOR.MINOR.PATCH)**
+   There will only be versioning at Mobile Service level and not at sub-component level
 
-   Major and Minor versions only.
-   If any one of the Mobile Client components step Major or Minor version, the other components of the Mobile Service versions step also and the overall Mobile Service Version also steps.
-
-   The knock on impact of this rule is that all components step in unison, from 1.2 to 1.3, even though there were no changes to some of the components.
+   - When do we step a version of the Mobile Service?
+     - if any of the components change (Backend, APB, Any of the SDKs) the Service Version will change
+   - We don't version the sub-components explicitly
+     - the sub-components are tagged and released when the service is being released (one component may have not have changed across two service releases, therefore it will have the two service release tags on the same GIT commit hash)
 
    **Value provided by this rule**
+   1. Even less confusion for MAD, they just import the Mobile Service and the version they want  
+   2. Same process for every release, easy for the community to follow
+   3. All releases should be scheduled. We should have less patch releases in this case.
    
-   For the MAD, if he/she has a version of a Service, the same version of the sub components are available also. No confusion
 
-   Note; you can still patch any of the sub components, without impacting the other versions.
-
-   <span style="color:blue">Wei; should we step the patch version of the overall service version? I presume that we should!</span>
-
-2. **Mobile Client Service SDK compatibility with Backend Component**
+2. **Public API Compatibility between versions of a Mobile Service**
    
-   For the Client Service SDK to be compatiable with the backend service;
-
-   * Client SDK Major Version **==** Backend Major Version **&&** Client SDK Minor Version **<=** Backend Minor Version
-   * Patch version can be ignored
+   If the MAJOR version number is the same then the APIs are backward comaptiable.
 
    **Example**
-        | Client SDK    | Backend       | Compatibility  |
-        | :------------:|:-------------:| :-------------:|
-        | v1.3          | v1.4          | Compatiable    |
-        | v1.3.2        | v1.3          | Compatiable    |
-        | v2.1          | v1.4          | InCompatible   |
-        | v1.6          | v1.4          | InCompatible   |
-
-   <span style="color:blue">Wei; Is this rule defunct now? Maybe not; a MAD may upgrade the Service from 1.4 to 1.5 but may not change his/her import (it imported 1.4 in the business logic and their code will still work.)</span>
+        | Service Version | Service Version | API Compatibility  |
+        | :---: | :---: | :---: |
+        | v1.3          | v1.4           | Compatiable    |
+        | v1.6          | v2.0           | InCompatiable    |
 
 3. **A public API breaking change results in a step in the MAJOR version**
    
    If there is a breaking change to any of the public APIs of the Service, then there must be a step in the MAJOR version of all components.
 
 ### Releasing
-If this approach is to be adopted, it would mean doing a release at a Mobile Service level and possibly have a monthly release cadence, i.e. picking up any changes across the components over the period.
-
-<span style="color:blue">Wei; do you want to add anything here around the repo structure?</span>
+If this approach is to be adopted, it would mean doing a release at a Mobile Service level and possibly have a release at teh end of every Sprint, i.e. picking up any changes across the components over the period.
 
 
 ### Benetits of Solution
 - we try to work at a service level which is the level at which our primary users work at.
 - we try to simplify the experience for the primary user
 
-
 ### Limitations of Solution
-- we step sub components of the Mobile Service even if they may not have changed
+- it will make it harder to have a single version across all the modules of a platform SDK. E.g. each Android module will have the version that matches the services, and they may not be the same.
 
 ## Versioning of other Components
 There are other components which will also have versions, namely;
