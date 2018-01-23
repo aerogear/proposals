@@ -1,5 +1,30 @@
 # Versioning of Components and their APIs
 
+
+## Latest
+
+- we should differentiate between upstream and downstream versioning
+- it will be the APB version which is important, as the APB provisions the backend service
+   - the APB should include the upstream version (which its based on) and the version that it is provisioning (which is equivalent to the version of the APB itself, I presume.
+- the common components include
+   - the Mobile CLI
+   - IDE Plugin
+   - Mobile Core (installer?)
+       - the installer will point to the repo where the playbooks are installed, currently aerogear/playbooks
+       - in downstream, it may point at a different organisation
+   - MiniShift Plugin
+   - Mobile App Representation (their APB) - do they have a dependency on a Mobile Service, possibly CI/CD service? Worth considering
+ - at what level are Release Notes published
+   - at Mobile Service level (each Service)
+   - at AeroGear Services level (the common components)
+ - a Mobile Service can have two variants
+   - more complete version (APB and SDKs)
+   - simpler version (just the SDKs); the APB could be owned/managed by others, e.g. if KC took over their APB
+ - have a Mobile Service version
+   - SDK changes, it can be patched and still be compatiable with the Mobile Service (MS is 5.0 and iOS SDK is 5.0.1). SemVer provide compatibility
+   - don't have to step everything, can patch, reduces process load
+   -  
+
 ## Introduction
 
 Versioning across system components and their public APIs needs to be considered.
