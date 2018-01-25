@@ -1,148 +1,113 @@
-# Versioning of Components and their APIs
-
-
-## Latest
-
-- we should differentiate between upstream and downstream versioning
-- it will be the APB version which is important, as the APB provisions the backend service
-   - the APB should include the upstream version (which its based on) and the version that it is provisioning (which is equivalent to the version of the APB itself, I presume.
-- the common components include
-   - the Mobile CLI
-   - IDE Plugin
-   - Mobile Core (installer?)
-       - the installer will point to the repo where the playbooks are installed, currently aerogear/playbooks
-       - in downstream, it may point at a different organisation
-   - MiniShift Plugin
-   - Mobile App Representation (their APB) - do they have a dependency on a Mobile Service, possibly CI/CD service? Worth considering
- - at what level are Release Notes published
-   - at Mobile Service level (each Service)
-   - at AeroGear Services level (the common components)
- - a Mobile Service can have two variants
-   - more complete version (APB and SDKs)
-   - simpler version (just the SDKs); the APB could be owned/managed by others, e.g. if KC took over their APB
- - have a Mobile Service version
-   - SDK changes, it can be patched and still be compatiable with the Mobile Service (MS is 5.0 and iOS SDK is 5.0.1). SemVer provide compatibility
-   - don't have to step everything, can patch, reduces process load
-   -  
+# Versioning of Components
 
 ## Introduction
 
-Versioning across system components and their public APIs needs to be considered.
+Upstream versioning across system components and their public APIs needs to be considered.
 
 ## Problem Description
 
-The initial discussions which led to this proposal were around how to handle versions of APIs of the different components. The discussions quickly followed into an overall discusion on how the different components will be versioned. There are a number of problems which need to be addressed with this proposal;
-* How do we make it easy for the Mobile App Developer, that he/she does not get bogged down in a version checking ritual
-  * What version matrices does a Mobile App Developer have to check? 
+Using AeroGear means being aware of and interacting with various components of the system. There needs to be an agreed process in place in how we version these components such that an end user can easily identify what components work together and what versions of the components are compatiable. 
+
+* What version matrices does a Mobile App Developer need to understand the system? 
 * At what level are versions kept?
 * When changes are made to different components, what is the impact on dependent components?
-* Do we have rules which define compatibility? 
+* How do the QE team know what to test, with respect to what version of what component should work together?
  
 
 ## Asumptions
 Listing of assumptions on how other parts of the system will work, as the proposal may base some decisions on these assumptions.
 
-1. The Mobile Application business logic written by the Mobile App Developer will have to import a specific version of the SDK they want. This implies that a Mobile Device can have multiple versions of each SDK.
-2. An assumption is that the OpenShift Catalog will, in the future, publish versions associated with each Service. It won't act on them, just display the version.
+* An assumption is that the OpenShift Catalog will, in the future, publish versions associated with each Service. It won't act on them, just display the version.
 
   
 ## Proposed Solution
-This solution looks to simplify as much as possible 'versioning' for the primary target audience which is the Mobile Application Developer (MAD). The first thing is to consider at what level does the MAD interact with the system.
+A Mobile Service (e.g. Synch, Push, Auth) is made up of a number of sub-components, namely;
 
-* One of the first tasks a MAD will perform is to go to the Service Catalog and provision the Mobile Services he/she requires. In doing this they are working at a 'service level'.
-
-* The next task which the MAD will perform is to integrate two services via the Mobile CLI (could be eventually from the IDE Plugin which will use the CLI). Again the level in which the MAD is working at is 'service level'. At this point, a lot of the work on the backend is complete, the MAD can proceed to develop his/her app on the client side.
-
-* Next task for the MAD is to include the IDE plugin. Just get the latest version of the plugin. Use of the plugin is probably optional.
-
-* Next is for the MAD to import the SDK which is needed for the service he/she is using. The SDK being a component of the Service. At this point the MAD is working at an 'SDK level', even though what they want is an API they can use to access their provisioned Mobile Service, the SDK being the implementation of that interface.
-
-
-   Based on the above, we are proposing an overarching **Mobile Service version**. This overall version will encompass a number of sub components defined further on.
-
-The intention is that the MAD will only have to deal with the Mobile Service version, to simplify their experience. 
-
-* Once they import a Service version (e.g. v1.3), they get the version of SDK (e.g. v1.3) which is inline with the Service version for the platform they are working on
-* The only time they will need to upgrade their own code (i.e. their business logic) is if they are upgrading to a new MAJOR release of the Service, i.e. the public interface of the Service potentially has changed.
-* Because the MAD will be responsible for service integrations he/she will have to be aware of the compatiability between services.
-
-   **Example Service Integration Martix**
-
-        | Synch         | Keycloak         | Compatibility  |
-        |  -----------  |  --------------  |  ------------  |
-        | v1.3.\*       | v1.4, v1.5, v1.6 | Compatiable    |
-        | v2.1          | v2.\*, v3.1, v3.2| Compatiable    |
-
-The above matrix needs to exist somewhere and be available to the MAD.
-
-The MAD will use the Mobile CLI for service integrations and possibly also to get config to add to his/her project. The Mobile CLI's version will most likely be associated with the version of OpenShift.
-
-     We are proposing that we think Service first and 
-     with your Service you can pick the SDK for whatever you are developing on.
-
-### Mobile Service Components
-
-* Mobile Service Name and Overall Version (Major.Minor.Patch)
-  * Backend Component and its API 
-  * Mobile Client Service SDK (Android) and its API 
-  * Mobile Client Service SDK (iOS) and its API 
-  * Mobile Client Service SDK (Cordova) and its API 
+* Mobile Service
+  * Backend Component
   * Mobile Service APB
+  * Mobile Client Service SDK (Android)
+  * Mobile Client Service SDK (iOS)
+  * Mobile Client Service SDK (Cordova)
+  * UI - Service may or may not have a UI component
+  * CLI - Service may or may not have a specific aspect of the CLI dedicated to its functionality
+  * IDE Plugins - Service may or may not have a specific aspect of an IDE Plugin dedicated to its functionality (TBD)
+    * Android Studio
+    * VS Code
+    * XCode
+  * E2E Service Tests - suite of tests for the version of the Mobile Service
 
-  ![Alt](images/Service-Versioning.png)
+All of the sub-components above will have their own version.
 
-Below are a set of rules to make versioning simpler and to encompass the various components which encompass a Mobile Service.
+### Introduce an overall **Mobile Service version**
+This version is like a snapshot in time of everything (all specific sub-components) which makes up that Mobile Service. See table below for overall version of Synch 1.3.
 
-### Proposed Rules to be applied
-1. **Have just a Mobile Service Version only (MAJOR.MINOR.PATCH)**
-   
-   There will only be versioning at Mobile Service level and not at sub-component level
+|               | Synch 1.3        |
+|  -----------  |  --------------  |
+| APB                  | v1.0 |
+| Backend Serice       | v1.2 |
+| SDK-Android          | v1.1 |
+| SDK-iOS              | v1.0 |
+| SDK-Cordova          | v1.0 |
+| IDE-AndroidStudio    | v1.2 |
+| IDE-VSCode           | v1.0 |
+| IDE-XCode            | v1.0 |
+| UI                   | v1.0 |
+| CLI                  | v1.0 |
+| E2E Service Tests    | v1.0 |
 
-   - When do we step a version of the Mobile Service?
-     - if any of the components change (Backend, APB, Any of the SDKs) the Service Version will change
-   - We don't version the sub-components explicitly
-     - the sub-components are tagged and released when the service is being released (one component may not have changed across two service releases, therefore it will have the two service release tags (e.g. SYNCH-1.3.1, SYNCH-1.4.0) on the same GIT commit hash)
+The reason for introducing this is two fold;
+* to encapsulate all of the sub components and their versions such that developers can easily identify what versions of the sub-components make up that version of the service and therefore work together.
+* to have some high level entity which has a version when considering Mobile Service integrations (i.e. what Mobile Services can work together and what versions of these services work together)
 
-   **Value provided by this rule**
-   * Even less confusion for MAD, they just import the Mobile Service and the version they want  
-   * Same process for every release, easy for the community to follow
-   * All releases should be scheduled. We should have less patch releases in this case.
+This table of each overall version of the Mobile Serivce and its set of sub-components must be produced and made availble through the docs. This table of information is essential for developers.
 
-2. **Public API Compatibility between versions of a Mobile Service**
-   
-   If the MAJOR version number of a service is the same then the APIs are backward comaptiable.
+### Produce Mobile Service Integration Matrices
+Once a developer knows what makes up a Mobile Service, their next task may be to integrate that Mobile Service with another Service. Therefore we propose the following two tables:
 
-   **Example**
+**Mobile Service Integration Matrix**
 
-        | Service Version | Service Version | API Compatibility  |
-        | --------------- | --------------- | ------------------ |
-        | v1.3            | v1.4            | Compatiable        |
-        | v1.6            | v2.0            | InCompatiable      |
+There needs to be a matrix which a develoepr can use to see what Mobile Services work together. See example below.
 
-   
-3. **A public API breaking change results in a step in the MAJOR version**
-   
-   If there is a breaking change to any of the public APIs of the Service, then there must be a step in the MAJOR version of all components.
+![Alt](images/MobileServiceIntegrationMatrix.png)
+
+**Mobile Service Integration Version Compatiability Matrix**
+
+Once a developer knows what services work together, then they need to know what versions of those services work together, they need a version compatiability matrix. See Example below;
+
+![Alt](images/MobileServiceIntegVerCompatibilityMatrix.png)
+
+### Process
+With regard to the versioning process what are the necessary changes/points to note;
+
+* If a sub-component of a service changes
+  * That sub-component is stepped and the overall Service version is stepped
+  * The other sub-components of the Service are not stepped
+
+  ![Alt](images/MobileServiceMatrix-SynchEx.png)
+
+* Release Notes should be produced at a Mobile Service level
+  * You can see what sub-components changed.
+* You can patch a sub-component, e.g. SDK-Android-Sync 0.4.0 -> 0.4.1
+  * The patched component will need to be tested with other components within the service which it interacts with (i.e. its touch points)
+  * Based on tests passing; the overall service version will not change, but the patch is compatible. SDK-Android-Sync 0.4.1 is compatible with Sync 0.4 and all its constituent components.
+* If the Mobile Service which is being offered by AeroGear makes use of another standalone backend Service, the version of that Service must be represented
+  * Keycloak Service is not under Mobile/Aerogear’s control but its a primary component of AeroGear's Auth Service. We package it along with an APB and SDKs. We need to highlight what version of Keycloak is being used inside our different versions of our Auth Service. See Example below;
+
+  ![Alt](images/MobileServiceAuthExample.png)
+
 
 ### Releasing
-If this approach is to be adopted, it would mean doing a release at a Mobile Service level and possibly have a release at the end of every Sprint, i.e. picking up any changes across the components over the period.
-
-
-### Benetits of Solution
-- we try to work at a service level which is the level at which our primary users work at.
-- we try to simplify the experience for the primary user
-
-### Limitations of Solution
-- it will make it harder to have a single version across all the modules of a platform SDK. E.g. each Android module will have the version that matches the services, and they may not be the same.
-
-## Versioning of other Components
-There are other components which will also have versions, namely;
-* IDE Plugin; this will have its own version. The interface into the system which it will use is the Mobile CLI. It may download a version of the Mobile CLI that its compatiable with when its being installed.
-* Mobile CLI; it will have its own version. The dependency it has is the version of OpenShift
-
-We don't really see the MAD having to overly worry about the versions of above. Updating the plugin is what they will need to do and then they should get all available functionality.
+All components can be released separately, but it may be worth considering the release of a Mobile Serice after every Sprint or second Sprint. In doing that you are producing a compatiable set of components which represents the service.
 
 
 ## Additional Considerations
-- the relationship between the Core SDK and the Service SDKs from a version perspective!
+- the relationship between the Core SDK and the Service SDKs from a version perspective! This relationship will need to be handled but the developer more than likley will not see the Core SDK or not have to worry about it.
 - How much defensive functionality is developed around allowing or disallowing Mobile Service Integrations to be requested if we know that there will be compatiability issues.
+  - this could be addressed in the IDE Plugin or the Mobile CLI. It possibly doesn't need to be addressed now but can be considered in the future.
+- the following will most likely also need versions
+  - Mobile Core (installer?)
+     - the installer will point to the repo where the playbooks are installed, currently aerogear/playbooks
+     - in downstream, it may point at a different organisation
+  - MiniShift Plugin
+  - Mobile App Representation (their APBs) - do they have a dependency on a Mobile Service, possibly CI/CD service? Worth considering
