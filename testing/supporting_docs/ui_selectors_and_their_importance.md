@@ -2,7 +2,7 @@
 There are various application engineering decisions that will affect the decision that can 
 be made when choosing an Appium client. For example, if engineering decides to add “preferred” 
 selectors such as ‘accessibility Id’s’ or ‘ID’s’ to the application that will be tested, the 
-main benifit will be a test suite that is more stable as disscussed in the next section. Also 
+main benefit will be a test suite that is more stable as discussed in the next section. Also 
 a library with less selectors such as Webdriverio could be used to create the tests.  If 
 engineering decides not to take this path then, the test suite will likely be more flaky, and 
 the best client to use is the Java-client which has a wide range of selectors.
@@ -28,7 +28,7 @@ It is possible to improve the rigidness and performance of xpaths in test by usi
 relative xpaths that are shorter and more flexible.  For example, a standard xpath 
 selector from an Android application such as:
 
-    "//android.widget.TextView[@text='My Messages']"
+    "//Android.widget.TextView[@text='My Messages']"
 
 Can be shortened to:
 
@@ -39,11 +39,11 @@ is that when using one like the example above there may also a dependency on the
 text value of the page.  If the text on the page is changed, then it will be required 
 to change the selector in the test as well.   While this is an improvement still, one 
 risk with using relative xpaths is over time, as developers change, the knowledge of 
-the importance of relative xpaths in providing benefits to the test suite can be lost, 
-resulting inefficient and more brittle xpaths, as produced by tools such as “Appium 
-Inspector”, being used and effecting test suite performance and reliability. 
+the importance of relative xpaths in providing benefits to the test suite can be lost. 
+This can result in inefficient and more brittle xpaths, as produced by tools such as 
+“Appium Inspector”, being used and affecting test suite performance and reliability. 
 
-## Examples of adding Adding Selectors to Applications
+## Examples of Adding Selectors to Applications
 
 ### iOS (AccessibilityId Example)
 
@@ -128,15 +128,15 @@ var button = new Button{
 
 ### Cordova (id Example)
 
-Unlike Android, iOS and Cordova applications with can be tested using Appiums native context, webview
-context should be used to test cordova/ionic applications.  When testing applications using the webview
+Unlike Android, iOS and Xamarin applications with can be tested using Appiums native context, webview
+context should be used to test Cordova/Ionic applications.  When testing applications using the webview
 context, web based targeting selectors should be used.  For example in the Java-client the full Selenium
 WebDriver API can be used, while in the Nodejs Webdriverio library the standard webdriverio selector 
 targeting methods can be used.  Note that in both of these libraries, the standard web based selector or
 locator strategies are not available when using the native context.
 
-In order to prepare Appium to test a cordova/ionic application in the desied capabilities section,
-`autoWebview` shoul be included and set to `true`.  This will immediatley prepare the test to run in a
+In order to prepare Appium to test a Cordova/Ionic application in the desied capabilities section,
+`autoWebview` should be included and set to `true`.  This will immediatley prepare the test to run in a
 webview context.  Note, the native view selector or locator stategies will now be unavailable.
 
 The following is an example of using standard id attributes in an ionic based application.  With these
@@ -166,13 +166,14 @@ targeting these elements.
 </ion-card>
 ```
 
-One dependency when running uder webview is the compatibility of the version of chromedriver that is
+One dependency when running under webview, is the compatibility of the version of chromedriver that is
 being used with Appium.  A version is shipped with the Appium, however this is not always compatible
-with the chrome browser running in the android device.  In this case an error can be thrown when 
+with the chrome browser running in the Android device.  In this case an error can be thrown when 
 trying to switch to the webview context.  In order to avoid this problem, a new version of Chromedriver
 can be downloaded and installed on the system and then the Appium server can be instructed to use this
-chromedriver via the "Desired Capabilities".  Note that Chromedriver versions are only compatibile with
-a few versions of the Chrome browser on the device, and when installing a Chromedriver it is important
-to match the compatibility of the version of Chromedriver and its compatible Chrome browser version, or
-the latest Chromedriver can be installed, and the Chrome browser on the device updated to the latest 
-version.
+chromedriver via the "Desired Capabilities".  
+
+Note that Chromedriver versions are only compatibile with a few versions of the Chrome browser on the 
+devices.  When installing a Chromedriver it is important either to match the compatibility of the version 
+of Chromedriver and its compatible Chrome browser version, or to install the latest version of Chromedriver, 
+and then update the Chrome browser on the device to the latest version.

@@ -4,7 +4,7 @@
 
 When a developer installs “Appium Desktop” on their machine, not only are they installing the server 
 and GUI tooling to configure and control it, they also install a tool called appium inspector which 
-can be used to interrogate applications to find selectors.  Once the server is started clicking on 
+can be used to interrogate applications to find selectors.  Once the server is started, clicking on 
 the “Start Inspector Session” button in the application will bring up the session configuration 
 screen.  
 
@@ -35,7 +35,7 @@ generate test code.  This is available for a number of languages, but the code p
 unrefined and should not be used as the test code.  The recorded code can be found under the
 recorder section at the center of the screen.
 
-Note: Before using Appium Inspector for checking elements in Cordova applications on android it 
+Note: Before using Appium Inspector for checking elements in Cordova applications on Android it 
 is advisable to install chromedriver, and update the chrome browser inside the emulator to a 
 version compatible with the chromedriver version installed.
 

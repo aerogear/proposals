@@ -1,8 +1,8 @@
 ## Appium 
-Appium is a cross platform UI testing tool for mobile applications running on 
-either android or iOS devices.  It can be used to test native applications, 
+Appium is a cross-platform UI testing tool for mobile applications running on 
+either Android or iOS devices.  It can be used to test native applications, 
 hybrid applications like Cordova and Xamarin, and web app testing through mobile 
-device browsers.  One of major points of the Appium philosophy is to avoid time 
+device browsers.  One of the key points of the Appium philosophy is to avoid time 
 consuming processes like compiling to run UI tests.
 
 
@@ -14,7 +14,7 @@ https://appium.io/docs/en/commands/element/find-elements/#selector-strategies
 The picture above shows the available selector strategies to appium in order to 
 locate elements in a mobile application. Note that some of the descriptions also 
 shows the required attributes in for both Android and iOS applications.  It can 
-be a problem when using cross platform tools such as Cordova to use these 
+be a problem when using cross-platform tools such as Cordova to use these 
 selectors and the webview context should be used.  It is important to note that 
 some clients do not offer all of the selector strategies as shown in the table 
 above.
@@ -45,18 +45,18 @@ willing to put in extra effort to label all elements with
 preferred selectors?
 
 ### Java Client
-The java client is one of main Appium libraries used for testing with Appium and 
-is frequently kept up to date, and new features tend to land quicker than in other 
-clients.  It can continue testing in situations that require switching between 
-applications without needing to change context, such as redirecting to login in the 
-browser and back to the application, and also contains support for cross platform 
-java-based page objects using annotations.  All selectors specified in the Appium 
-documentation are available to this library. 
+The Java-client is one of the main Appium libraries used for testing with Appium.  
+It is well maintained, and new features are added quicker than in other clients.  
+It can continue testing in situations that require switching between applications 
+without needing to change context, such as redirecting to login in the browser and 
+back to the application, and also contains support for cross-platform java-based 
+page objects using annotations.  All selectors specified in the Appium documentation 
+are available to this library. 
 
 
 ### Webdriverio
 The Webdriverio client is a subset of the Webdriverio library for UI testing.  Like 
-the Java-client it can easily handle switching between applications, however it does 
+the Java-client, it can easily handle switching between applications, however it does 
 not have as many selectors available to it.  Accessibility ID, the recently added 
 Class Name and XPath are the selectors native to the driver, while Android UIAutomator’s 
 and iOS UIAutomation framework can also be used.

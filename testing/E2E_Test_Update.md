@@ -20,8 +20,8 @@ information on Appium, its clients and some important considerations when select
 an Appium client library. 
 
 [UI Selectors And Their Importance](./supporting_docs/ui_selectors_and_their_importance.md) - 
-Contains information on UI selectors, thier impact on a UI test suite, and examples 
-of how to implement some prefered selectors in mobile applications.  
+Contains information on UI selectors, their impact on a UI test suite, and examples 
+of how to implement some preferred selectors in mobile applications.  
 
 [Tools for Finding UI Selectors](./supporting_docs/tools_to_find_selectors.md) - 
 Contains information on tools that can be used to identify selectors and generate
@@ -29,7 +29,7 @@ unrefined e2e test code.
 
 ## The Previous Test Proposal
 
-The previous test prosal sections on test suites and test infrastructure can be
+The previous test proposal sections on test suites and test infrastructure can be
 found at the following links:
 
 [Proposal on Test Suite](./e2e_drafts/)
@@ -43,30 +43,31 @@ for end to end UI tests, were:
 * Tests must be readable to enable incoming developers to get involved 
 quickly in the maintenance of the test suite and production of new tests.
 
-* The test suite should be easily maintainable to reduce time spent on 
+* The test suite should be easily maintainable to reduce the time spent on 
 fixing bugs and the amount of developers required to maintain it.
 
 * In order to fulfill the required test cases, the framework used to create 
 the test suite needs to be able to handle interactions from applications 
-than redirects it to the browser for signing into the application.
+that redirects it to the browser for signing into the application.
 
 During the research phase, various test frameworks for android apps were 
-investigated including UIAutomator, Espresso and Appium multiple appium clients 
-(some information in Appium Clients section).  It was determined, from this 
-research, that the only framework capable of performing application and 
-browser redirect actions was Appium and should be used for end to end UI testing. 
+investigated including UIAutomator, Espresso and Appium including multiple 
+appium clients (some information in Appium Clients section).  It was 
+determined, from this research, that the only framework capable of performing 
+application and browser redirect actions was Appium, and therefore it should 
+be used for end to end UI testing. 
 
 In order to facilitate the other two expectations of the test suite, it was 
 proposed that best practices such as page objects should be used to avoid 
-code repetition and split the presentation logic from the test logic, and 
-that while the Appium Java-client was the preferred option to create the tests, 
-the proposal called for using Kotlin to create a domain specific language (DSL) 
-to write the tests, as it would provide easier readability and understanding 
-for new developers.
+code repetition and split the presentation logic from the test logic.  While 
+the Appium Java-client was the preferred option to create the tests, the 
+proposal called for using Kotlin to create a domain specific language (DSL) 
+to write the tests.  This decision was made as this approach would provide 
+easier readability and understanding for new developers.
  
 ### Test Infrastructure Proposal Summarry
 The test proposal looked at possible ways of running tests in a continuous 
-integration manner.   Tools such as Circle CI, Travis and Jenkins CI were 
+integration manner.  Tools such as Circle CI, Travis and Jenkins CI were 
 evaluated to determine their viability in running the appium UI tests.  It was 
 determined, due to problems running on Circle CI, Travis and docker images on 
 Jenkins CI, a macOS slave should be attached to Jenkins CI.  On this device 
@@ -86,10 +87,10 @@ Chromedriver and the emulators installed on the macOS slave.
 ## Making a Solid Test Suite
 
 Where possible, the use of preferred selectors such as AccessibilityId, Id, name etc., 
-placed inside the applications on relevant UI elements would be preferable, as it would 
+placed inside the applications on relevant UI elements would be preferable.  It would 
 eliminate the risks of minor changes in the development of the application, such as moving 
-the order or position of elements on a page or changing text values, requiring an update 
-in the UI tests. 
+the order or position of elements on a page or changing text values, hence requiring an
+update in the UI tests. 
 
 The use of common design in application development coupled with the development of the 
 suite of tests in a single repository that contains smart abstractions can be major factors 
@@ -103,31 +104,31 @@ annotations.
 
 ## Updated Proposals
 
-A decision should first be made if prefferred selectors are to be implmented in the mobile
+A decision should first be made if preferred selectors are to be implmented in the mobile
 showcase applications.  The effects of this decision are shown below:
 
-#### 1). Using Prefferred Selectors in Applications
+#### 1). Using Preferred Selectors in Applications
 
 * Tests are likely to be less brittle, therefore less time should be required on 
-maintainence
+maintenance
 * Any client can be used provided it has the ability to handle redirects to the browser
 
 
-#### 2). Not Using Prefferred Selectors in Applications
+#### 2). Not Using Preferred Selectors in Applications
 
 * Tests are likely to be more brittle, therefore more time required to maintain them
-* The Java-client should be the preferred choice of client as it has more stragtegies to
+* The Java-client should be the preferred choice of client as it has more strategies to
 target locators than other libraries
 
 ### Possible Test Suite Implementations
 
 1. A nodejs implmentation with webdriverio - This should be considered if there is a 
-decision to use preferrd selecotrs is to use them in the showcase applications as there 
+decision to use preferred selecotrs is to use them in the showcase applications as there 
 is a lot of experience using nodejs within the teams.
 
-1. A Java-client implementation or the Akow library - Should be considered if the decision
-on using prefered selectors is not to use them. This will allow for more locator strategies 
-thatcan be used to create the tests.  The downside of this approach could be the upkeep of 
+1. A Java-client implementation or the Akow library - should be considered if the decision
+on using preferred selectors is not to use them. This will allow for more locator strategies 
+that can be used to create the tests.  The downside of this approach could be the upkeep of 
 the Akow library. 
 
 ## Test Writing Time Estimation
