@@ -1,0 +1,25 @@
+= Putting Documentation URLs in Code
+
+
+== Introduction
+
+To give a user appropriate information in context as they perform an action, we put links into the UI to link to appropriate documentation. 
+This proposal covers the process for creating both the UI and the target links and describes the process by which those targets are resolved to provide the right information at the right time to end users.
+
+== Problem Description
+
+The current process is to request a URL from documentation while the UI is being worked on, meaning:
+
+* Tech writers are not familar with the UI and might give an incorrect URL.
+* URL might change due to docs refactoring.
+* A version specific URL might be given, when a generic URL is required.
+
+After release of the software, the URL might disappear for a variety of reasons, which can be made better by redirection, but only if an issue is reported.
+
+ 
+== Proposed Solution
+
+When working on the UI, the engineer spots an opportunity to improve the user experience by providing a URL to documentation:
+
+1. Raise a PR to create a HTML file in https://github.com/aerogear/docs.aerogear.org under the `redirect`
+
