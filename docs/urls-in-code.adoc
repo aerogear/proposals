@@ -21,5 +21,13 @@ After release of the software, the URL might disappear for a variety of reasons,
 
 When working on the UI, the engineer spots an opportunity to improve the user experience by providing a URL to documentation:
 
-1. Raise a PR to create a HTML file in https://github.com/aerogear/docs.aerogear.org under the `redirect`
+1. Raise a PR to create a HTML file in https://github.com/aerogear/docs.aerogear.org under the `redirect`. For example, see https://github.com/finp/docs.aerogear.org/blob/proposal42/redirect/prop42.html
++
+NOTE: The content of that html file should redirect to the most appropriate url as a temporary measure.
+
+2. Modify UI code to use the new URL.
+
+3. After everything is merged, tech writers can modify the html to redirect the UI link to the most appropriate document.
+
+
 
