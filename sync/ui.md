@@ -26,13 +26,28 @@ There are 4 main screens in the initial Admin UI:
 
 ### Data Schema
 
-TODO: why a resolver per property (see screenshot)? Should it not be one resolver per type?
-TODO: is the left side editor interactive (should i be able to add/delete nodes in there)?
-
 The link:https://redhat.invisionapp.com/share/4RLVQKKQ2VS#/screens/305421181[Schema Editor] will be used to define the types, mutations and subscriptions of the user's data structure. It will be split in two sections:
 
-. left side: a text editor where the user can edit the source of the schema
-. right side: an graphical (tree) representation of the schema. This will be used to explore the schema and also add a resolver to a type
+. left side: a text editor where the user can edit the source of the schema.
+. right side: an graphical (tree) representation of the schema. This will be used to explore the schema, add and edit resolvers. Adding and removing of nodes is not planned for the first version.
+
+A resolver is typically defined for all Queries and Mutations. However, a field level resolver makes sense for a 1:M relationship. For example, given then below schema:
+
+```
+type Note {
+  id: String
+  content: String
+  comments: [Comment]
+}
+
+type Comment {
+  id: String
+  text: String
+  note_id: String
+}
+```
+
+a resolver would be attached to the comments field of Note for resolving all Comments that are linked to that Note e.g. execute a SQL query like 'select * from Comments where note_id = "some_id"'
 
 ### Data Sources
 
@@ -41,26 +56,24 @@ Editing and deleting Data sources should also be possible.
 
 ### Resolver Mappings
 
-TODO: Screen for resolver mappings list missing?
-TODO: Why do we need response mappings? Doesn't GraphQl let us define how the response exactly looks like?
-
 This section lets the user define queries for data sources and map them to resolvers.
-
-### Resolver mappings
-
-This view allows the user to create and manage request and response mapping templates. Those templates are always connected to a data source. Request templates are queries (e.g. SQL queries) that retrieve data. Response queries can be used to transform the retrieved data (e.g. string to JSON).
 
 ### Resolver editor
 
-A Pop-up shown when the user clicks on `Add Resolver` in the `Data Schema` screen. It is used to combine a data source with queries to retrieve the data and transform the result. The queries are selected from pre-filled dropdowns. For example, there could be a resolver for the `User` type that combines the `Postgres` data source with a query `select {{userId}} from users;`.
-The view should have a dropdown to select the data source and to other dropdowns to select:
+A Pop-up shown when the user clicks on `Add Resolver` in the `Data Schema` screen. It is used to combine a data source with queries to retrieve the data and transform the result. For example, there could be a resolver for the `getUser` query that combines the `Postgres` data source with a query `select {{userId}} from users;`.
+The view should have a dropdown to select the data source and two fields to edit the:
 
-. the request mapping template. Select a query to retrieve data. The source of the query will be shown below.
+. `request mapping`: a query to retrieve data.
 
-. the response mapping template. Select a transformation to convert the retrieved data back into a form that the user is interested in. 
+. `response mapping`: allows to transform the retrieved data into any form the users needs.
+
+There are a couple of use cases where the response mappings are useful:
+
+* being able to map a potentially complex response into a simpler schema
+
+* adding authorisation to filter out items from the response based on the user context
 
 ### Schema Playground
 
-TODO: probably best to use graphiql and wrap it inside react.
-
 A screen where the user can run queries and inspect the results. We should use the default link:https://github.com/graphql/graphiql[Graphiql] view if possible.
+Another option would be [Prism](https://github.com/prismagraphql/graphql-playground). This would be worth an investigation.
