@@ -62,7 +62,10 @@ See https://www.apollographql.com/docs/react/features/optimistic-ui.html#optimis
 
 ## Pagination
 
-x
+There are a few options for how to do pagination in GraphQL.
+See https://graphql.org/learn/pagination/ for more info.
+At this time, it's unclear what dependencies there are on the SDK to support these different pagination mechanisms, if any.
+For the most part, pagination is about how you define your schema and setup your resolvers.
 
 ## Client Metrics
 
