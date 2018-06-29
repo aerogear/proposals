@@ -70,7 +70,7 @@ app.use('/graphql', bodyParser.json(), function (req, res, next) {
 ```
 
 The GraphQL server will be notified about changes via a `channel` in Postgres that it is `LISTEN`ing to.
-THe Admin server will send a `NOTIFY` to this channel whenever the shcema or resolver mappings have changed.
+THe Admin server will send a `NOTIFY` to this channel whenever the schema or resolver mappings have changed.
 
 As the server needs to store resources, i.e the Data Schema, Resolver Mappings and Webhooks, a data store is required.
 Postgres will be used for this.
