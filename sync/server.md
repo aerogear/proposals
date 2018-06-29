@@ -79,6 +79,8 @@ A pubsub service will be required for managing the event driven nature of Subscr
 Postgres will also be used for this i.e. again using NOTIFY/LISTEN commands
 Any Clients interested in a particular event/subscription will connect via websocket to the server.
 Each server replica will connect to the same Postgres instance and `LISTEN` to a specific channel, depending on the subscription they are watching, and notify connected clients of any events.
+There should be a pubsub layer, with a well defined interface, that wraps the relevant nodejs lib (e.g. https://github.com/voxpelli/node-pg-pubsub), rather than calling the lib directly.
+This is to faciliate a potential change to another pubsub system/message broker in future if scalability concerns dictate.
 
 The Admin UI will be written in React, and use Patternfly for the look & feel.
 See https://github.com/patternfly/patternfly-react & https://github.com/patternfly/patternfly-react-demo-app for more info on the technology.
