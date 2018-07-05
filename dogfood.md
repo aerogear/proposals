@@ -1,7 +1,7 @@
 # MemeoList dog food app
 Previously while working on the mobile team, Summers (GitHub user secondsun) wrote a simple application "memeolist" (a portmanteau of memo-list and meme).  This exercise let him explore how the RHMAP 3.x product worked if he were building an app that was very similar to other apps he had seen. He then compiled his experiences into a post mortem, fixed a few annoying bugs, and gained a deeper understanding of how RHMAP worked.
 
-Finally he shared a running instance with the mobile-team so that we could get a "stress test" of the application.  Overall this was a fun and successful project for us and we should replicate that exercise with Aerogear so we can test our assumptions and stretch our knowledge.
+Finally he shared a running instance with the mobile-team so that we could get a "stress test" of the application.  Overall this was a fun and successful project for us and we should replicate that exercise with AeroGear so we can test our assumptions and stretch our knowledge.
 
 A video demonstration for the project is here : https://drive.google.com/file/d/0B64fta5NYF0TUmNFZy0zQ3JTRjQ/view
 The source code for the original versions are here : https://github.com/secondsun/memeolist-android and https://github.com/secondsun/art-henry-cloud-app/
@@ -20,7 +20,7 @@ Users should be able to log in with a social login that is provided by the under
 Users should be able to upload and edit information about themselves in the application.  This will include email, a display name, a profile picture, and a short biography.  As much of this information should be auto filled from the social login when a user first logs in.
 
 ### User should be able to see recent memes
-Upon logging in, users should be able to see all of the memes which have been recently posted by other users.  They should be able to view older memes by scrolling through the feed in a list style view.  A meme view will show the meme as an image, the display name of the author of the meme, a summry view which displays the number of comments, the number of likes, the date a meme was posted, and provide an option to "like" a meme or "unlike" a previously liked meme.
+Upon logging in, users should be able to see all of the memes which have been recently posted by other users.  They should be able to view older memes by scrolling through the feed in a list style view.  A meme view will show the meme as an image, the display name of the author of the meme, a summary view which displays the number of comments, the number of likes, the date a meme was posted, and provide an option to "like" a meme or "unlike" a previously liked meme.
 
 ### User should be able to see comments on a specific meme
 A meme allows users to comment on it.  Comments are displayed on a timeline from oldest to newest.  With the exception of the comment's author, comments are read only.
@@ -38,7 +38,7 @@ A user should have the ability to delete all of their comments and meme history 
 
 ### Where possible offline usage should be supported
 
-Users should be able to create memes, view cached memes, author comments, and like posts while offline.  Once the device returns online the qued activity should be submitted to the server even if the app is backgrounded.
+Users should be able to create memes, view cached memes, author comments, and like posts while offline.  Once the device returns online the queued activity should be submitted to the server even if the app is backgrounded.
 
 ## Clients
 
@@ -68,33 +68,32 @@ The following is a graphql schema for the proposed data model.  The GraphQL sche
 
 ```graphql
 type Profile {
-  id: ID! @unique
-  email: String!
+  id: ID! @isUnique
+  email: String! @isUnique
   display_name: String!
   biography: String!
   pictureUrl: String!
-}
-
-type MemeList {
-  id: ID! @unique
-  ownerId: ID!
-  createdOn: String!
-  updatedOn: String!
-  memes: [Meme!]!
+  memes: [Meme]!
 }
 
 type Meme {
-  id: ID! @unique
+  id: ID! @isUnique
   ownerId: ID!
   createdOn: String!
-  updatedOn: String!
   photoUrl: String!
   comments: [Comment!]!
 }
 
-type Comment {
-  id: ID! @unique
+type Like {
+  id: ID! @isUnique
   ownerId: ID!
+  memeId: ID!
+}
+
+type Comment {
+  id: ID! @isUnique
+  ownerId: ID!
+  meme: Meme!
   createdOn: String!
   updatedOn: String!
   comment: String!
@@ -106,6 +105,8 @@ type Query {
   feed(memeListId: ID!): [Meme!]!
   meme(memeId: ID!):Meme
 }
+
+
 
 type Mutation {
   createProfile(email: String!, display_name: String!, biography: String!, pictureUrl: String!):Profile!
