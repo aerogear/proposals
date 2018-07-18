@@ -1,0 +1,42 @@
+= AeroGear Media Proposal
+
+:product-name: Mobile Services
+
+== Introduction
+
+As {product-name} gathers pace, we are creating a large number of media assets, however these are difficult to find, manage and use effectively. Plus, they rot over time.
+
+== Problem Description
+
+A constant problem with both user facing and contributor documentation is media asset degradation. With a complex UI, sometimes the best solution is to use a screenshot or diagram. A screenshot is inserted in the docs, but becomes stale over time and the user is confused because the docs don't match the user experience.
+
+To keep UIs consistent, often the best way is to store screenshots for side-by-side comparisons. But where is that screenshot stored?
+
+Video provides an easy to consume way to learn about software, but which video is most up to date?
+
+== Proposed Solution
+
+An AeroGear media repo, where the following is stored:
+
+* Screenshots
+* Diagrams
+* Links to videos
+
+This would provide a central point where media is contributed, analysed and updated.
+
+The resulting library can easily be referenced by docs, reports, blogs, and other authored content. 
+
+The advantage is that it becomes the one place where everyone knows that media reviews/decisions are made.
+
+It should answer the following questions:
+
+* Where should I report an issue with a video/image?
+* Where should I request a new video/image?
+* Where should I get AeroGear logos?
+* Where should I get AeroGear architectural diagrams?
+* Where should I get the latest demo videos?
+* Where should I get showcase app screenshots?
+* Where should I request a new video/image?
+
+The advantage of using github is that the workflow is familiar to all of us, and it's good for storage of images, altho not video, hence the use of links for video.
+
