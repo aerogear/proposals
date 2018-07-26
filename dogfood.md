@@ -93,7 +93,6 @@ type Comment {
 type Query {
   allMemes:[Meme]
   profile(email: String!):Profile!
-  usersMemes(email: String!): [Meme!]
 }
 
 type Mutation {
