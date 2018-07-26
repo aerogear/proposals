@@ -70,7 +70,7 @@ The following is a graphql schema for the proposed data model.  The GraphQL sche
 type Profile {
   id: ID! @isUnique
   email: String! @isUnique
-  display_name: String
+  displayName: String
   pictureUrl: String
   memes: [Meme]
 }
@@ -97,7 +97,7 @@ type Query {
 }
 
 type Mutation {
-  createProfile(email: String!, display_name: String!, pictureUrl: String!):Profile!
+  createProfile(email: String!, displayName: String!, pictureUrl: String!):Profile!
 
   createMeme(photoUrl: String!, owner: String!):Meme!
   likeMeme(id: ID!): Meme!
