@@ -64,62 +64,45 @@ The iOS SDK has all of the features we need, and iOS has an Apollo GraphQL libra
 
 The following is a graphql schema for the proposed data model.  The GraphQL schema also includes the public APIs that will be implemented.
 
-### Sample Schema
+### Current Schema
 
 ```graphql
 type Profile {
   id: ID! @isUnique
   email: String! @isUnique
-  display_name: String!
-  biography: String!
-  pictureUrl: String!
-  memes: [Meme]!
+  display_name: String
+  pictureUrl: String
+  memes: [Meme]
 }
 
 type Meme {
   id: ID! @isUnique
   ownerId: ID!
-  createdOn: String!
   photoUrl: String!
-  comments: [Comment!]!
-}
-
-type Like {
-  id: ID! @isUnique
-  ownerId: ID!
-  memeId: ID!
+  owner: String
+  likes: Int!
+  comments: [Comment]
 }
 
 type Comment {
   id: ID! @isUnique
-  ownerId: ID!
-  meme: Meme!
-  createdOn: String!
-  updatedOn: String!
+  owner: String!
   comment: String!
 }
 
 type Query {
+  allMemes:[Meme]
   profile(email: String!):Profile!
-  usersMemes(email: String!): [Meme!]!
-  feed(memeListId: ID!): [Meme!]!
-  meme(memeId: ID!):Meme
+  usersMemes(email: String!): [Meme!]
 }
 
-
-
 type Mutation {
-  createProfile(email: String!, display_name: String!, biography: String!, pictureUrl: String!):Profile!
-  updateProfile(id: ID!, email: String!, display_name: String!, biography: String!, pictureUrl: String!):Profile!
-  deleteProfile(id: ID!):Profile!
+  createProfile(email: String!, display_name: String!, pictureUrl: String!):Profile!
 
-  postMeme(picture: [Int!]!, topComment: String!,bottomComment: String!, memeListId: ID!): Meme!
-  deleteMeme(id: ID!): Meme!
+  createMeme(photoUrl: String!, owner: String!):Meme!
   likeMeme(id: ID!): Meme!
-  unlikeMeme(id: ID!): Meme!
 
-  postComment(memeId: ID!, comment: String!): Meme!
-  deleteComment(id: ID!): Meme!
+  postComment(memeId: ID!, comment: String!, owner: String!): Comment!
 }
 ```
 
